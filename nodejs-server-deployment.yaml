@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: andy-hello-world 
+  labels:
+    app: demo 
+spec:
+  replicas: 100 #broke minikube, don't do this!
+  selector:
+    matchLabels: 
+      app: demo 
+  template:
+    metadata:
+      labels:
+        app: demo 
+    spec:
+      containers:
+        - image: andylim95/app:latest
+          name: andy-hello-world
+          ports:
+            - containerPort: 8000
+  

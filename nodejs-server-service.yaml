@@ -1,0 +1,10 @@
+apiVersion: apps/v1 
+kind: Service 
+metadata: 
+  name: andy-lim-hello-world-service 
+spec:
+  ports:
+    - port: 8000
+  selector:
+    app: demo
+  
