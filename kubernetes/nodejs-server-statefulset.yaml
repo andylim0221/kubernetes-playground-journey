@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: nodejs-server
-  namespace: default-test
+  namespace: postgres
 spec:
   serviceName: nodejs-server
   selector:
