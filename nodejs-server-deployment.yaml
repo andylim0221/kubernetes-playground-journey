@@ -5,7 +5,7 @@ metadata:
   labels:
     app: demo 
 spec:
-  replicas: 100 #broke minikube, don't do this!
+  replicas: 2 #broke minikube, don't do this
   selector:
     matchLabels: 
       app: demo 
@@ -19,4 +19,3 @@ spec:
           name: andy-hello-world
           ports:
             - containerPort: 8000
-  

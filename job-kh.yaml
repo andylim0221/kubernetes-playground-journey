@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    job-name: kube-hunter
+  name: kube-hunter
+  namespace: ids-test
+spec:
+  backoffLimit: 4
+  completionMode: NonIndexed
+  completions: 1
+  activeDeadlineSeconds: 300
+  parallelism: 1
+  selector:
+    matchLabels:
+      job-name: kube-hunter
+  suspend: false
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        job-name: kube-hunter
+    spec:
+      containers:
+      - command:
+        - kube-hunter
+        args:
+        - "--pod"
+        - "--active"
+        image: aquasec/kube-hunter
+        imagePullPolicy: Always
+        name: kube-hunter
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 300

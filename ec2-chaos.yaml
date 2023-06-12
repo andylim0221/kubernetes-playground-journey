@@ -1,0 +1,11 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: AWSChaos
+metadata:
+  name: ec2-stop-example
+  namespace: chaos-mesh
+spec:
+  action: ec2-stop
+  secretName: chaos-mesh-secret
+  awsRegion: 'us-east-1'
+  ec2Instance: 'i-0c61dcc58781cd20e'
+  duration: '5m'

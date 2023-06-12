@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nodejs-server-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: nodejs-server
+  template:
+    metadata: 
+      name: nodejs-server
+      labels:
+        name: nodejs-server
+    spec:
+      containers:
+        - image: andylim95/app:latest
+          name: nodejs-server
+          ports:
+            - containerPort: 8000

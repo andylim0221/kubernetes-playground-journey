@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kube-hunter
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 4
+      completionMode: NonIndexed
+      completions: 1
+      activeDeadlineSeconds: 300
+      parallelism: 1
+      suspend: false
+      template:
+        spec:
+          containers:
+          - command:
+            - kube-hunter
+            args:
+            - "--pod"
+            - "--active"
+            image: aquasec/kube-hunter
+            imagePullPolicy: Always
+            name: kube-hunter
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 300

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nodejs-server
+spec:
+  serviceName: nodejs-server
+  selector:
+    matchLabels:
+      name: nodejs-server
+  replicas: 4
+  template:
+    metadata:
+      name: nodejs-server
+      labels:
+        name: nodejs-server
+    spec:
+      containers:
+        - name: nodejs-server
+          image: andylim95/app:latest
+          ports:
+            - containerPort: 8000
