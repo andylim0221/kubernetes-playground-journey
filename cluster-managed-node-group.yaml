@@ -1,0 +1,16 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: devops-test-cluster
+  region: ap-southeast-1
+
+managedNodeGroups:
+- name: mng-node-group
+  desiredCapacity: 2
+  minSize: 1
+  maxSize: 2
+  instanceTypes:
+  - t3.medium
+  labels:
+    istio-injection: enabled

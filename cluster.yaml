@@ -1,0 +1,20 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: devops-test-cluster
+  region: ap-southeast-1
+
+nodeGroups:
+  - name: devops-test-cluster-nodegroup
+    instanceType: t3a.medium
+    desiredCapacity: 2
+  
+iam:
+  withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: aws-load-balancer-controller
+        namespace: kube-system
+      wellKnownPolicies:
+        awsLoadBalancerController: true

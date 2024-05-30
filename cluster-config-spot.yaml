@@ -1,0 +1,27 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+managedNodeGroups:
+- name: mng-spot-4vcpu-8gb
+  desiredCapacity: 2
+  minSize: 1
+  maxSize: 4
+  spot: true
+  instanceTypes:
+  - c5.xlarge
+  - c5a.xlarge
+  - c5ad.xlarge
+  - c5d.xlarge
+  - c6a.xlarge
+  taints:
+    - key: spotInstance
+      value: "true"
+      effect: NoSchedule
+  labels:
+    intent: apps
+    managed-by: mng-spot
+
+metadata:
+  name: ${EKS_CLUSTER_NAME}
+  region: ${AWS_DEFAULT_REGION}
+  version: "1.27"

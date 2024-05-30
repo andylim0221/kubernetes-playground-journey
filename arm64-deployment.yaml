@@ -1,0 +1,42 @@
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: team6
+  labels:
+    app.kubernetes.io/created-by: eks-finhack
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workload6
+  namespace: team6
+  labels:
+    app.kubernetes.io/created-by: eks-finhack
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: workload6
+  template:
+    metadata:
+      labels:
+        app: workload6
+    spec:
+      nodeSelector:
+        intent: apps
+        kubernetes.io/arch: arm64
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: inflate
+          image: public.ecr.aws/eks-distro/kubernetes/pause:3.2
+          resources:
+            requests:
+              cpu: "250m"
+              memory: 1Gi
+      tolerations: 
+      - key: "gravitonInstance" 
+        operator: "Equal" 
+        value: "true" 
+        effect: "NoSchedule"
+EOF

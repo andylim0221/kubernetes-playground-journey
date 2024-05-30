@@ -1,0 +1,23 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+managedNodeGroups:
+- name: mng-graviton-4vcpu-8gb
+  desiredCapacity: 2
+  minSize: 1
+  maxSize: 4
+  instanceTypes:
+  - c6g.xlarge
+  taints:
+    - key: gravitonInstance
+      value: "true"
+      effect: NoSchedule
+  labels:
+    intent: apps
+    managed-by: mng-graviton
+
+metadata:
+  name: 
+  region: 
+  version: "1.27"

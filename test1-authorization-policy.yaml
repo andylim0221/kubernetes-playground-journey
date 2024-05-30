@@ -1,0 +1,28 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: ingress-policy
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+      istio: ingressgateway
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        ipBlocks: ["0.0.0.0/0"]
+    to:
+    - operation:
+        hosts:
+        - devops-testing-api.dronos.ai
+  - from:
+    - source:
+        ipBlocks: ["0.0.0.0/0"]
+    to:
+    - operation:
+        hosts:
+          - devops-testing.dronos.ai
+
+

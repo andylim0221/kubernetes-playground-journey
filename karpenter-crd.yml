@@ -1,0 +1,71 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  labels:
+    intent: apps
+    managed-by: "karpenter"
+  requirements:
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["on-demand"]
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["c5.large", "m5.large", "m5.xlarge"]
+  limits:
+    resources:
+      cpu: 1000
+      memory: 1000Gi
+  providerRef:
+    name: default
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: default
+spec:
+  subnetSelector:
+    karpenter.sh/discovery: ${EKS_CLUSTER_NAME}
+  securityGroupSelector:
+    karpenter.sh/discovery: ${EKS_CLUSTER_NAME}
+  tags:
+    managed-by: "karpenter"
+    intent: "apps"
+EOF
+---
+# mixed spot and on-demand
+cat <<EOF | kubectl apply -f -
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  labels:
+    intent: apps
+    managed-by: "karpenter"
+  requirements:
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["spot", "on-demand"]
+    - key: karpenter.k8s.aws/instance-category
+      operator: NotIn
+      values: [t]
+    - key: karpenter.k8s.aws/instance-size
+      operator: NotIn
+      values: [small, medium]
+  limits:
+    resources:
+      cpu: 1000
+      memory: 1000Gi
+  providerRef:
+    name: default
+EOF
+
+
+#load testing deployment
+kubectl run load-generator \
+  --image=williamyeh/hey:latest \
+  --restart=Never -- -c 50 -q 10 -z 60m http://monte-carlo-pi.monte-carlo-pi.svc:8080/?iterations=1000000
+
+# Karpenter and HPA can be used together to scale up the microservices and nodes
