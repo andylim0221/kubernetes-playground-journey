@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+ name: postgres-ingress
+ namespace: postgres
+spec:
+ rules:
+   - host: ac55746bb1d9640b7a1d935b72147be8-112304667.ap-southeast-1.elb.amazonaws.com
+     http:
+       paths:
+         - path: /*
+           pathType: Prefix
+           backend:
+             service:
+               name: postgres
+               port:
+                 number: 5432
